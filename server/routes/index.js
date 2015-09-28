@@ -1,5 +1,8 @@
 UserModel = require('../models/user.js');
-user = require('../controllers/user.js');
+user_v1 = require('../controllers/user/v1.js');
+help_v1 = require('../controllers/help/v1.js');
+trade_v1 = require('../controllers/trade/v1.js');
+
 
 var com = require('../utils/com.js');
 
@@ -55,8 +58,27 @@ module.exports=function(app){
   });
 
 
-  app.get('/search',user.search);
-	app.get('/reg',user.reg); //注册
-	app.get('/importTestUser',user.importTestUser);//导入测试数据
+	// 用户
+	app.get('/user/v1/register',user_v1.register);
+	app.get('/user/v1/login',user_v1.login);
+	app.get('/user/v1/sendCaptcha',user_v1.sendCaptcha);
+	app.get('/user/v1/isBindPhone',user_v1.isBindPhone);
+	app.get('/user/v1/bindPhone',user_v1.bindPhone);
+	app.get('/user/v1/fillInfo',user_v1.fillInfo);
+	app.get('/user/v1/getProfile',user_v1.getProfile);
+	app.get('/user/v1/doFollow',user_v1.doFollow);
+	app.get('/user/v1/getFollowList',user_v1.getFollowList);
+
+	// 互助
+	app.get('/help/v1/searchTeacher',help_v1.searchTeacher);
+	app.get('/help/v1/book',help_v1.book);
+	app.get('/help/v1/cancelBook',help_v1.cancelBook);
+
+	// 交易
+	app.get('/trade/v1/pay',trade_v1.pay);
+	app.get('/trade/v1/rate',trade_v1.rate);
+	app.get('/trade/v1/getOrderList',trade_v1.getOrderList);
+
+
 
 };

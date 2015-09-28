@@ -2,7 +2,7 @@
 
 var jsonReturn=function(res,msg,code,args) {
   res.jsonp({
-    state:{
+    status:{
       msg:msg,
       code:code,
     },

@@ -1,5 +1,23 @@
-UserModel = require('../models/user.js');
-TestUsers = require('../data/testUsers.js');
+var UserModel = require('../models/user.js');
+var TestUsers = require('../data/testUsers.js');
+var orm = require("orm");
+
+exports.test = function (req,res,next) {
+  // body...
+  req.models.customers.find({ name: "22" }, function (err, people) {
+      // SQL: "SELECT * FROM person WHERE surname = 'Doe'"
+      if (err) throw err;
+
+      console.log("People found: %d", people.length);
+      console.log("First person: %s, age %s", people[0].name, people[0].city);
+
+      // people[0].age = 16;
+      people[0].save(function (err) {
+          // err.msg = "under-age";
+      });
+      jsonReturn(res,"success",err);
+  });
+}
 
 exports.search = function (req, res, next) {
   if (!req.session.user) {
