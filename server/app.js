@@ -10,6 +10,7 @@ var path = require('path');
 // var MongoStore= require('connect-mongo')(express);
 var settings= require('./settings');
 var orm = require("orm");
+var models= require('./models');
 
 var app = express();
 
@@ -31,20 +32,20 @@ app.use(express.session({
   //   db:settings.db
   // })
 }));
-app.use(orm.express("mysql://root:123456@localhost/ci_app1", {
-    define: function (db, models, next) {
-        // models.person = db.define("person", { ... });
-        models.customers = db.define("customers", {
-            name      : String,
-            address   : String,
-            city       : String, // FLOAT
-        }, {
-            methods: {},
-            validations: {}
-        });
-        next();
-    }
-}));
+// app.use(orm.express(settings.mysql, {
+//     define: function (db, models, next) {
+//         models.customers =
+//         next();
+//     }
+// }));
+app.use(function (req, res, next) {
+   models(function (err, db) {
+     if (err) return next(err);
+     req.models = db.models;
+     req.db     = db;
+     return next();
+   });
+ }),
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 

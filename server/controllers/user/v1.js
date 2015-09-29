@@ -6,7 +6,7 @@ URL: /user/v1/register
 Method: Post
 Params:
 {
-     nickname:String
+     username:String
      password:String
 }
 result:{
@@ -17,8 +17,12 @@ result:{
 }
 **/
 exports.register=function(req,res,next){
-
-  com.jsonReturn(res,'注册成功',101,null);
+  req.models.users.find({'username':'2'},function(err,result){
+    if (err) throw err;
+    // console.log("People found: %d", people.length);
+    // console.log("First person: %s, age %d", people[0].fullName(), people[0].age);
+    com.jsonReturn(res,'注册成功',101,result);
+  });
 };
 
 /**
