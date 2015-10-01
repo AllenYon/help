@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) DEFAULT NULL COMMENT '用户名',
+  `username` varchar(32) DEFAULT NULL COMMENT '用户名',
   `password` char(32) DEFAULT NULL COMMENT '密码',
   `phone` varchar(32) DEFAULT NULL COMMENT '电话号码',
   `avatar` varchar(518) DEFAULT NULL COMMENT '头像',
