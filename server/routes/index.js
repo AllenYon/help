@@ -28,7 +28,8 @@ module.exports=function(app){
 	app.get('/user/v1/getFollowList',user_v1.getFollowList);
 
 	//导师
-	app.post('/user/v1/becomeTeacher',user_v1.becomeTeacher);
+	app.post('/teacher/v1/becomeTeacher',teacher_v1.becomeTeacher);
+	app.post('/teacher/v1/update',teacher_v1.update);
 
 	// 互助
 	app.get('/help/v1/searchTeacher',help_v1.searchTeacher);

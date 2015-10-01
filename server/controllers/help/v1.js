@@ -10,17 +10,6 @@ Params: {
      chatType: int //聊天类型
      teacherLevel: int // 0,1,2   初级导师，中级导师，明星导师
 }
-Result：{
-     state:
-     result:{
-          list:[{
-               // 导师资料
-
-          },{
-               // 导师资料
-          }]
-     }
-}
 **/
 exports.searchTeacher = function (req, res, next) {
   com.jsonReturn(res,'找到结果',101,{'name':'alin'});

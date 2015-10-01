@@ -15,7 +15,6 @@ result:{
 }
 **/
 register:function(req,res,next){
-  console.log(req.body);
   var newUser={
     username:req.body.username,
     password:req.body.password,
@@ -23,17 +22,15 @@ register:function(req,res,next){
   // 查询是否已经注册
   req.models.users.find({username:req.body.username},1,function(err,result){
     if (err) throw err;
-    console.log(result.length);
     if (result.length==0) {
       //注册
-      req.models.users.create(newUser,function(err){
+      req.models.users.create(newUser,function(err,result){
         if (err) throw err;
-        console.log('注册成功');
-        com.jsonReturn(res,'注册成功',101,null);
+        console.log(result);
+        return com.jsonReturn(res,'注册成功',101,result);
       });
     } else {
-      console.log('用户已注册');
-      com.jsonReturn(res,'用户已注册',404,null);
+      return com.jsonReturn(res,'用户已注册',404,null);
     }
   });
 },
@@ -347,41 +344,4 @@ getFollowList:function(req,res,next){
 },
 
 
-/**
-成为导师
-**/
-becomeTeacher:function(req,res,next){
-  console.log(req.body);
-  var uid = req.body.uid;
-  req.models.users.get(uid,function(err,user){
-    if (err) {
-        throw err;
-    }
-    console.log(user);
-    if (!user) {
-        return com.jsonReturn(res,'未找到该用户',404,null);
-    }
-    //已经是导师
-    if (user.tid!=null) {
-        console.log(user.tid);
-        return com.jsonReturn(res,'已经是导师',404,null);
-    }
-    var newTeacher={
-      title:req.body.title,
-      star:0,
-      max_cpq:0,
-      current_cpq:0,
-      current_chat_type:0,
-      online:0,
-      fake_phone:null,
-    };
-    //创建导师关联
-    req.models.teachers.create(newTeacher,function(err,item){
-      console.log(item);
-      user.save({tid:item.id},function(err) {
-        return com.jsonReturn(res,'创建导师成功',101,user);
-      });
-    });
-  })
-},
 };
