@@ -21,9 +21,10 @@ module.exports = function (orm, db) {
     current_cpq      : { type: 'integer'},
     current_chat_type      : { type: 'integer'},
     online      : { type: 'integer'},
-    fake_phone      : { type: 'text'},
-    create_time : { type: 'date',time: true },
-    update_time : { type: 'date',time: true }
+    fake_phone      : { type: 'text'}
+  },
+  {
+    timestamp: true
   },
   {
     hooks: {

@@ -6,8 +6,9 @@ var modts = require("orm-timestamps");
 var connection = null;
 
 function setup(db, cb) {
-  require('./user')(orm, db);
+  require('./users')(orm, db);
   require('./followers')(orm, db);
+  require('./teachers')(orm, db);
   // require('./comment')(orm, db);
   return cb(null, db);
 }
@@ -17,7 +18,7 @@ module.exports = function (cb) {
 
   orm.connect(settings.mysql, function (err, db) {
     if (err) return cb(err);
-    
+
     // 自动生成 create_time update_time
     db.use(modts, {
        createdProperty: 'create_time',

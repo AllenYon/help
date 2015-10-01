@@ -1,5 +1,6 @@
 var com = require('../../utils/com.js');
 
+module.exports={
 /**
 用户注册：
 URL: /user/v1/register
@@ -13,7 +14,7 @@ result:{
      result:{}
 }
 **/
-exports.register=function(req,res,next){
+register:function(req,res,next){
   console.log(req.body);
   var newUser={
     username:req.body.username,
@@ -35,7 +36,7 @@ exports.register=function(req,res,next){
       com.jsonReturn(res,'用户已注册',404,null);
     }
   });
-};
+},
 
 /**
 v1 登录注册接口
@@ -54,7 +55,7 @@ Result: {
     }
 }
 **/
-exports.login=function(req,res,next){
+login:function(req,res,next){
   var username=req.body.username;
   var password=req.body.password;
   req.models.users.find({username:username},1,function(err,result){
@@ -71,26 +72,26 @@ exports.login=function(req,res,next){
     req.session.user=result[0];
     com.jsonReturn(res,'登录成功',101,result[0]);
   });
-};
+},
 
 /**
 登出
 **/
-exports.logout=function(req,res,next){
+logout:function(req,res,next){
   req.session.user=null;
   com.jsonReturn(res,'登出成功',101,null);
-};
+},
 
 /**
 用户状态
 **/
-exports.getStatus=function(req,res,next){
+getStatus:function(req,res,next){
   if (req.session.user) {
     com.jsonReturn(res,'操作成功',101,req.session.user);
   } else {
     com.jsonReturn(res,'未登录',404,null);
   }
-};
+},
 /**
 用户绑定手机, 发送验证码
 URL： /user/v1/sendCaptcha
@@ -108,7 +109,7 @@ result:{
      }
 }
 **/
-exports.sendCaptcha=function(req,res,next){
+sendCaptcha:function(req,res,next){
   if (!req.session.user) {
       com.jsonReturn(res,'未登入',404,null);
       return;
@@ -125,7 +126,7 @@ exports.sendCaptcha=function(req,res,next){
       com.jsonReturn(res,'发送验证码成功',101,{captcha:9999});
       return;
   });
-};
+},
 
 /**
 v1 是否已经绑定手机
@@ -139,9 +140,9 @@ Result:
      result:{}
 }
 **/
-exports.isBindPhone=function(req,res,next){
+isBindPhone:function(req,res,next){
   com.jsonReturn(res,'已绑定',101,null);
-};
+},
 
 /**
 绑定手机
@@ -154,9 +155,9 @@ Params:{
 Result:{
 }
 **/
-exports.bindPhone=function(req,res,next){
+bindPhone:function(req,res,next){
   com.jsonReturn(res,'绑定成功',101,null);
-};
+},
 
 
 /**
@@ -172,7 +173,7 @@ Result:{
      state:{} //成功或失败
 }
 **/
-exports.fillInfo=function(req,res,next){
+fillInfo:function(req,res,next){
   if (!req.session.user) {
       com.jsonReturn(res,'未登入',404,null);
       return;
@@ -193,7 +194,7 @@ exports.fillInfo=function(req,res,next){
         com.jsonReturn(res,'操作成功',101,user);
     });
   });
-};
+},
 
 /**
 5. 获取个人信息
@@ -211,7 +212,7 @@ RESULT:{
      }
 }
 **/
-exports.getProfile=function(req,res,next){
+getProfile:function(req,res,next){
     var uid=req.query.uid;
     req.models.users.get(uid,function(err,user){
       if(err) {
@@ -224,7 +225,7 @@ exports.getProfile=function(req,res,next){
       }
       com.jsonReturn(res,'找到该用户',101,user);
     });
-};
+},
 
 
 /**
@@ -239,7 +240,7 @@ Result:{
 }
 
 **/
-exports.follow=function(req,res,next){
+follow:function(req,res,next){
   if (!req.session.user) {
       com.jsonReturn(res,'未登入',404,null);
       return;
@@ -275,12 +276,12 @@ exports.follow=function(req,res,next){
           com.jsonReturn(res,'关注成功',101,null);
     });
   });
-};
+},
 
 /**
 取消关注
 **/
-exports.unfollow=function(req,res,next){
+unfollow:function(req,res,next){
   if (!req.session.user) {
       com.jsonReturn(res,'未登入',404,null);
       return;
@@ -316,7 +317,7 @@ exports.unfollow=function(req,res,next){
         com.jsonReturn(res,'取消关注成功',101,null);
     });
   });
-};
+},
 
 
 
@@ -327,7 +328,7 @@ Method: GET
 Params:{ }
 Result:{}
 **/
-exports.getFollowList=function(req,res,next){
+getFollowList:function(req,res,next){
   if (!req.session.user) {
       com.jsonReturn(res,'未登入',404,null);
       return;
@@ -343,6 +344,44 @@ exports.getFollowList=function(req,res,next){
       }
       com.jsonReturn(res,'操作成功',101,result);
   });
+},
 
 
+/**
+成为导师
+**/
+becomeTeacher:function(req,res,next){
+  console.log(req.body);
+  var uid = req.body.uid;
+  req.models.users.get(uid,function(err,user){
+    if (err) {
+        throw err;
+    }
+    console.log(user);
+    if (!user) {
+        return com.jsonReturn(res,'未找到该用户',404,null);
+    }
+    //已经是导师
+    if (user.tid!=null) {
+        console.log(user.tid);
+        return com.jsonReturn(res,'已经是导师',404,null);
+    }
+    var newTeacher={
+      title:req.body.title,
+      star:0,
+      max_cpq:0,
+      current_cpq:0,
+      current_chat_type:0,
+      online:0,
+      fake_phone:null,
+    };
+    //创建导师关联
+    req.models.teachers.create(newTeacher,function(err,item){
+      console.log(item);
+      user.save({tid:item.id},function(err) {
+        return com.jsonReturn(res,'创建导师成功',101,user);
+      });
+    });
+  })
+},
 };

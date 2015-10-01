@@ -66,3 +66,22 @@ describe('loading express', function(){
       },done);
     });
 });
+
+
+describe('成为导师',function(){
+    it('POST  /user/v1/becomeTeacher',function(done){
+      var postData={
+        uid:10,
+        title:'蘑菇街HR'
+      };
+
+      server.post('/user/v1/becomeTeacher').send(postData)
+      .expect(function(res){
+        console.log(res.body);
+        if (res.body.status.code!=101) {
+          throw new Error('code is not 101');
+        }
+      }).end(done);
+
+    });
+});
