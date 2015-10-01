@@ -1,6 +1,6 @@
 var com = require('../../utils/com.js');
 
-
+module.exports={
 /**
 搜索在线导师
 URL： /help/v1/searchTeacher
@@ -11,9 +11,9 @@ Params: {
      teacherLevel: int // 0,1,2   初级导师，中级导师，明星导师
 }
 **/
-exports.searchTeacher = function (req, res, next) {
+searchTeacher : function (req, res, next) {
   com.jsonReturn(res,'找到结果',101,{'name':'alin'});
-};
+},
 
 
 /**
@@ -28,9 +28,9 @@ Result：{
      result：{}
 }
 **/
-exports.book=function(req,res,next){
+book:function(req,res,next){
     com.jsonReturn(res,'预约成功',101,null);
-};
+},
 
 
 /**
@@ -45,6 +45,8 @@ Result:{
      result:
 }
 **/
-exports.cancelBook=function(req,res,next){
+cancelBook:function(req,res,next){
     com.jsonReturn(res,'取消成功',101,null);
+}
+
 };
