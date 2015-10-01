@@ -19,26 +19,13 @@ var moment = require('moment');
 `update_time` int(11) DEFAULT '0',
 **/
 module.exports = function (orm, db) {
-  var users = db.define('users', {
+  var followers = db.define('followers', {
     // id        : { type: 'integer', required: true, }
-    username     : { type: 'text'},
-    password      : { type: 'text'},
-    phone      : { type: 'text'},
-    avatar      : { type: 'text'},
-    desc      : { type: 'text'},
-    interest      : { type: 'text'},
-    tid      : { type: 'integer'},
-    utype      : { type: 'integer'},
-    cfans      : { type: 'integer'},
-    cfollows      : { type: 'integer'},
-    cbuys      : { type: 'integer'},
-    csells      : { type: 'integer'},
-    cpost      : { type: 'integer'},
-    // create_time : { type: 'date',time: true },
-    // update_time : { type: 'date',time: true }
+    uid     : { type: 'integer',required:true},
+    follow_uid      : { type: 'integer',required:true},
   },
   {
-    timestamp: true
+    timestamp:true
   },
   {
     hooks: {
@@ -66,8 +53,8 @@ module.exports = function (orm, db) {
         // }
 
         return {
-          id        : this.id,
-          username     : this.username
+          uid     : this.uid,
+          follow_uid     : this.follow_uid
         };
       }
     }

@@ -12,6 +12,7 @@
     "connect-mongo": "*",
     "connect-flash":"*",
     "orm":"*",
+    "orm-timestamps":"*",
     "moment": "2.4.0"
   }
 }

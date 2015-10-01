@@ -62,13 +62,15 @@ module.exports=function(app){
 	app.post('/user/v1/register',user_v1.register);
 	app.post('/user/v1/login',user_v1.login);
 	app.post('/user/v1/logout',user_v1.logout);
-	app.get('/user/v1/getStatus',user_v1.getStatus);
+	app.post('/user/v1/fillInfo',user_v1.fillInfo);
+	app.post('/user/v1/follow',user_v1.follow);
+	app.post('/user/v1/unfollow',user_v1.unfollow);
+
 	app.get('/user/v1/sendCaptcha',user_v1.sendCaptcha);
+	app.get('/user/v1/getStatus',user_v1.getStatus);
 	app.get('/user/v1/isBindPhone',user_v1.isBindPhone);
 	app.get('/user/v1/bindPhone',user_v1.bindPhone);
-	app.post('/user/v1/fillInfo',user_v1.fillInfo);
 	app.get('/user/v1/getProfile',user_v1.getProfile);
-	app.get('/user/v1/doFollow',user_v1.doFollow);
 	app.get('/user/v1/getFollowList',user_v1.getFollowList);
 
 	// 互助

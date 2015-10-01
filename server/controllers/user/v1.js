@@ -214,7 +214,10 @@ RESULT:{
 exports.getProfile=function(req,res,next){
     var uid=req.query.uid;
     req.models.users.get(uid,function(err,user){
-      if(err) throw err;
+      if(err) {
+        com.jsonReturn(res,'未找到该用户',404,err);
+        return;
+      }
       if (!user) {
         com.jsonReturn(res,'未找到该用户',404,err);
         return;
@@ -236,20 +239,110 @@ Result:{
 }
 
 **/
-exports.doFollow=function(req,res,next){
-    com.jsonReturn(res,"dofollow",101,null);
+exports.follow=function(req,res,next){
+  if (!req.session.user) {
+      com.jsonReturn(res,'未登入',404,null);
+      return;
+  }
+  var uid=req.session.user.id;
+  var follow_uid = req.body.follow_uid;
+
+  //不能关注自己
+  if (uid==follow_uid) {
+      com.jsonReturn(res,'不能关注自己',404,null);
+      return;
+  }
+
+  var query={
+    uid:uid,
+    follow_uid:follow_uid
+  };
+
+  req.models.followers.find(query,1,function(err,result){
+    if(err) {
+      throw err;
+    }
+    if(result.length!=0){
+      com.jsonReturn(res,'已关注',404,null);
+      return;
+    }
+    req.models.followers.create(query,function(err){
+          if (err) {
+            throw err;
+            // com.jsonReturn(res,'操作失败',404,err);
+            // return;
+          }
+          com.jsonReturn(res,'关注成功',101,null);
+    });
+  });
 };
+
+/**
+取消关注
+**/
+exports.unfollow=function(req,res,next){
+  if (!req.session.user) {
+      com.jsonReturn(res,'未登入',404,null);
+      return;
+  }
+  var uid=req.session.user.id;
+  var follow_uid = req.body.follow_uid;
+  //不能关注自己
+  if (uid==follow_uid){
+      com.jsonReturn(res,'不能取消关注自己',404,null);
+      return;
+  }
+
+  var query={
+    uid:uid,
+    follow_uid:follow_uid
+  };
+
+  req.models.followers.find(query,1,function(err,result){
+    if(err) {
+      throw err;
+    }
+    if(result.length==0){
+      // 双方未关注，不能取消关注
+      com.jsonReturn(res,'未关注对方',404,null);
+      return;
+    }
+    var removeItem = result[0];
+    removeItem.remove(function(err){
+        if (err) {
+          com.jsonReturn(res,'操作失败',404,err);
+          return;
+        }
+        com.jsonReturn(res,'取消关注成功',101,null);
+    });
+  });
+};
+
 
 
 /**
 14. 获取所有关注列表
 URL：/help/v1/getFollowList
 Method: GET
-Params:{
-
-}
+Params:{ }
 Result:{}
 **/
 exports.getFollowList=function(req,res,next){
-    com.jsonReturn(res,"getFollowList",101,null);
+  if (!req.session.user) {
+      com.jsonReturn(res,'未登入',404,null);
+      return;
+  }
+  var query ={
+    uid:req.session.user.id
+  }
+  // Z DESC A ASC
+  req.models.followers.find(query,['create_time','A'],function(err,result){
+      if (err) {
+        com.jsonReturn(res,'操作失败',404,err);
+        return;
+      }
+      com.jsonReturn(res,'操作成功',101,result);
+  });
+
+
 };

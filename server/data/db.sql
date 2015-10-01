@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `cbuys` int(11) DEFAULT '0' COMMENT '购买数',
   `csells` int(11) DEFAULT '0' COMMENT '出售数',
   `cpost` int(11) DEFAULT '0' COMMENT '发表数',
-  `create_time` int(11) DEFAULT '0',
-  `update_time` int(11) DEFAULT '0',
+  `create_time` datetime,
+  `update_time` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -34,10 +34,24 @@ CREATE  TABLE IF NOT EXISTS `teachers` (
   `current_chat_type` tinyint(1) DEFAULT '0' COMMENT '0:电话 1:IM',
   `online` tinyint(1) DEFAULT '0' COMMENT '0:offline 1:online',
   `fake_phone` varchar(32) DEFAULT NULL COMMENT '一次性电话',
-  `create_time` int(11) DEFAULT '0',
-  `update_time` int(11) DEFAULT '0',
+  `create_time` datetime,
+  `update_time` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+--
+
+DROP TABLE IF EXISTS `followers`;
+CREATE  TABLE IF NOT EXISTS `followers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL COMMENT '关注发起人',
+  `follow_uid` int(11) NOT NULL COMMENT '被关注人',
+  `create_time` datetime ,
+  `update_time` datetime ,
+  PRIMARY KEY (`id`,`uid`,`follow_uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8  AUTO_INCREMENT=1 ;
+
 
 -- --------------------------------------------------
 -- ----------------------------------
@@ -54,7 +68,7 @@ CREATE  TABLE IF NOT EXISTS `orders` (
   `seller_rate_content` varchar(528) DEFAULT NULL COMMENT '评价内容',
   `buyer_rate_score` int(1) DEFAULT '0' COMMENT '学生评价分',
   `buyer_rate_content` varchar(528) DEFAULT NULL COMMENT '评价内容',
-  `create_time` int(11) DEFAULT '0',
-  `update_time` int(11) DEFAULT '0',
+  `create_time` datetime,
+  `update_time` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
