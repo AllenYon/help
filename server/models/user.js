@@ -19,13 +19,23 @@ var moment = require('moment');
 `update_time` int(11) DEFAULT '0',
 **/
 module.exports = function (orm, db) {
-  var user = db.define('users', {
+  var users = db.define('users', {
     // id        : { type: 'integer', required: true, }
     username     : { type: 'text'},
     password      : { type: 'text'},
     phone      : { type: 'text'},
     avatar      : { type: 'text'},
-    create_time : { type: 'date', required: true, time: true }
+    desc      : { type: 'text'},
+    interest      : { type: 'text'},
+    tid      : { type: 'integer'},
+    utype      : { type: 'integer'},
+    cfans      : { type: 'integer'},
+    cfollows      : { type: 'integer'},
+    cbuys      : { type: 'integer'},
+    csells      : { type: 'integer'},
+    cpost      : { type: 'integer'},
+    create_time : { type: 'date',time: true },
+    update_time : { type: 'date',time: true }
   },
   {
     hooks: {

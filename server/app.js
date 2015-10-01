@@ -11,7 +11,6 @@ var path = require('path');
 var settings= require('./settings');
 var orm = require("orm");
 var models= require('./models');
-
 var app = express();
 
 // all environments
@@ -32,12 +31,6 @@ app.use(express.session({
   //   db:settings.db
   // })
 }));
-// app.use(orm.express(settings.mysql, {
-//     define: function (db, models, next) {
-//         models.customers =
-//         next();
-//     }
-// }));
 app.use(function (req, res, next) {
    models(function (err, db) {
      if (err) return next(err);

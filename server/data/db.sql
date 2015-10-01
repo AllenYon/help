@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `desc` varchar(518) DEFAULT NULL COMMENT '自我介绍',
   `interest` varchar(32) DEFAULT NULL COMMENT '兴趣列表 json  ',
   `tid` int(11) DEFAULT '0' COMMENT '导师信息关联ID',
-  `utype` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:普通用户 1:导师',
+  `utype` tinyint(1) DEFAULT '0' COMMENT '0:普通用户 1:导师',
   `cfans` int(11) DEFAULT '0' COMMENT '粉丝数',
   `cfollows` int(11) DEFAULT '0' COMMENT '关注数',
   `cbuys` int(11) DEFAULT '0' COMMENT '购买数',
