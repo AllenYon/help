@@ -3,9 +3,6 @@ var help_v1 = require('../controllers/help/v1');
 var trade_v1 = require('../controllers/trade/v1');
 var teacher_v1 = require('../controllers/teacher/v1');
 
-
-var com = require('../utils/com.js');
-
 module.exports=function(app){
 
 	app.get('/',function(req,res){
@@ -30,6 +27,10 @@ module.exports=function(app){
 	//导师
 	app.post('/teacher/v1/becomeTeacher',teacher_v1.becomeTeacher);
 	app.post('/teacher/v1/update',teacher_v1.update);
+	app.post('/teacher/v1/online',teacher_v1.online);
+	app.post('/teacher/v1/offline',teacher_v1.offline);
+	app.get('/teacher/v1/getOnlineStatus',teacher_v1.getOnlineStatus);
+
 
 	// 互助
 	app.get('/help/v1/searchTeacher',help_v1.searchTeacher);

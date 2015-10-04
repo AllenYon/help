@@ -6,7 +6,7 @@ module.exports={
   false : 未登录
   **/
   checkLogin : function(req){
-    if (req.session==null||req.session.user==null) {
+    if (req.session.user==null) {
       com.jsonReturn(res,'未登入',404,null);
       return false;
     }

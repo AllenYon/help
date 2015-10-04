@@ -1,4 +1,4 @@
-var com = require('../../utils/com.js');
+var com = require('../utils/com.js');
 
 
 /**

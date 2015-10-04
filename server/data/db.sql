@@ -28,7 +28,9 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE  TABLE IF NOT EXISTS `teachers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(32) DEFAULT NULL COMMENT '职位名称',
+  `skill` varchar(32) DEFAULT NULL COMMENT '技能专长',
   `star` int(11) DEFAULT '0' COMMENT '评级星数',
+  `level` int(1) DEFAULT '0' COMMENT '等级 0-4 初级 中级 高级 特别',
   `max_cpq` int(11) DEFAULT '0' COMMENT '最大可设置CPQ （cost per quator) 每15分钟花费',
   `current_cpq` int(11) DEFAULT '0' COMMENT '目前CPQ',
   `current_chat_type` tinyint(1) DEFAULT '0' COMMENT '0:电话 1:IM',

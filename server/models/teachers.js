@@ -16,7 +16,9 @@ module.exports = function (orm, db) {
   var teachers = db.define('teachers', {
     // id        : { type: 'integer', required: true, }
     title     : { type: 'text'},
+    skill      : { type: 'text'},
     star      : { type: 'integer'},
+    level      : { type: 'integer'},
     max_cpq      : { type: 'integer'},
     current_cpq      : { type: 'integer'},
     current_chat_type      : { type: 'integer'},

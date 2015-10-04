@@ -1,4 +1,4 @@
-var com = require('../../utils/com.js');
+var com = require('../utils/com.js');
 
 module.exports={
 /**
@@ -6,13 +6,30 @@ module.exports={
 URL： /help/v1/searchTeacher
 Method: GET
 Params: {
-     interest：[xx,xx] //兴趣范围
+     skill:xx //兴趣范围
      chatType: int //聊天类型
      teacherLevel: int // 0,1,2   初级导师，中级导师，明星导师
 }
+排序因子
+
+目前在线
+star
+level
+
 **/
 searchTeacher : function (req, res, next) {
-  com.jsonReturn(res,'找到结果',101,{'name':'alin'});
+  var searchParams={
+    skill:req.query.skill,
+    current_chat_type:req.query.current_chat_type,
+    level:req.query.level,
+    online:1
+  };
+  req.models.teachers.find(searchParams,['star','Z'],20,function(err,result){
+    if (err) {
+        throw err;
+    }
+    com.jsonReturn(res,'找到结果',101,result);
+  });
 },
 
 
