@@ -1,8 +1,8 @@
 
 -- --------------------------------------------------------
 -- --------------------------------------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) DEFAULT NULL COMMENT '用户名',
   `password` char(32) DEFAULT NULL COMMENT '密码',
@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `avatar` varchar(518) DEFAULT NULL COMMENT '头像',
   `desc` varchar(518) DEFAULT NULL COMMENT '自我介绍',
   `interest` varchar(32) DEFAULT NULL COMMENT '兴趣列表 json  ',
-  `tid` int(11) DEFAULT '0' COMMENT '导师信息关联ID',
-  `utype` tinyint(1) DEFAULT '0' COMMENT '0:普通用户 1:导师',
+  `teacher_id` int(11) DEFAULT '0' COMMENT '导师信息关联ID',
+  -- `utype` tinyint(1) DEFAULT '0' COMMENT '0:普通用户 1:导师',
   `cfans` int(11) DEFAULT '0' COMMENT '粉丝数',
   `cfollows` int(11) DEFAULT '0' COMMENT '关注数',
   `cbuys` int(11) DEFAULT '0' COMMENT '购买数',
@@ -24,9 +24,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- --------------------------------------------------------
 -- --------------------------------------------------------
-DROP TABLE IF EXISTS `teachers`;
-CREATE  TABLE IF NOT EXISTS `teachers` (
+DROP TABLE IF EXISTS `teacher`;
+CREATE  TABLE IF NOT EXISTS `teacher` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT '0' COMMENT '关联的 用户id',
   `title` varchar(32) DEFAULT NULL COMMENT '职位名称',
   `skill` varchar(32) DEFAULT NULL COMMENT '技能专长',
   `star` int(11) DEFAULT '0' COMMENT '评级星数',
@@ -35,7 +36,7 @@ CREATE  TABLE IF NOT EXISTS `teachers` (
   `current_cpq` int(11) DEFAULT '0' COMMENT '目前CPQ',
   `current_chat_type` tinyint(1) DEFAULT '0' COMMENT '0:电话 1:IM',
   `online` tinyint(1) DEFAULT '0' COMMENT '0:offline 1:online',
-  `fake_phone` varchar(32) DEFAULT NULL COMMENT '一次性电话',
+  -- `fake_phone` varchar(32) DEFAULT NULL COMMENT '一次性电话',
   `create_time` datetime,
   `update_time` datetime,
   PRIMARY KEY (`id`)
@@ -44,8 +45,8 @@ CREATE  TABLE IF NOT EXISTS `teachers` (
 --
 --
 
-DROP TABLE IF EXISTS `followers`;
-CREATE  TABLE IF NOT EXISTS `followers` (
+DROP TABLE IF EXISTS `follower`;
+CREATE  TABLE IF NOT EXISTS `follower` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) NOT NULL COMMENT '关注发起人',
   `follow_uid` int(11) NOT NULL COMMENT '被关注人',
@@ -58,8 +59,8 @@ CREATE  TABLE IF NOT EXISTS `followers` (
 -- --------------------------------------------------
 -- ----------------------------------
 
-DROP TABLE IF EXISTS `orders`;
-CREATE  TABLE IF NOT EXISTS `orders` (
+DROP TABLE IF EXISTS `order`;
+CREATE  TABLE IF NOT EXISTS `order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_status` int(1) DEFAULT '0' COMMENT '订单状态',
   `seller_uid` int(11) DEFAULT NULL COMMENT '导师id',

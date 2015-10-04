@@ -18,7 +18,7 @@ module.exports={
     var newUser={
       username:req.body.username,
       password:req.body.password,
-      utype:0,
+      // utype:0,
       cfans:0,
       cfollows:0,
       cbuys:0,
@@ -26,11 +26,11 @@ module.exports={
       cpost:0
     };
     // 查询是否已经注册
-    req.models.users.find({username:req.body.username},1,function(err,result){
+    req.models.user.find({username:req.body.username},1,function(err,result){
       if (err) throw err;
       if (result.length==0) {
         //注册
-        req.models.users.create(newUser,function(err,result){
+        req.models.user.create(newUser,function(err,result){
           if (err) throw err;
           return com.jsonReturn(res,'注册成功',101,result);
         });
@@ -60,7 +60,7 @@ module.exports={
   login:function(req,res,next){
     var username=req.body.username;
     var password=req.body.password;
-    req.models.users.find({username:username},1,function(err,result){
+    req.models.user.find({username:username},1,function(err,result){
       if (err) throw err;
       //未找到
       if (result.length==0) {
@@ -118,7 +118,7 @@ module.exports={
     }
     //已经绑定过的手机,返回已经绑定信息
     var phone = req.body.phone;
-    req.models.users.find({phone:phone},1,function(err,result){
+    req.models.user.find({phone:phone},1,function(err,result){
         if(result.length!=0){
           com.jsonReturn(res,'改手机已绑定',404,null);
           return;
@@ -181,7 +181,7 @@ module.exports={
         return;
     }
     var uid=req.session.user.id;
-    req.models.users.get(uid,function(err,user){
+    req.models.user.get(uid,function(err,user){
       if(err) throw err;
       user.avatar=req.body.avatar;
       user.interest=req.body.interest;
@@ -213,7 +213,7 @@ module.exports={
   **/
   getProfile:function(req,res,next){
       var uid=req.query.uid;
-      req.models.users.get(uid,function(err,user){
+      req.models.user.get(uid,function(err,user){
         if(err) {
           com.jsonReturn(res,'未找到该用户',404,err);
           return;
@@ -258,7 +258,7 @@ module.exports={
       follow_uid:follow_uid
     };
 
-    req.models.followers.find(query,1,function(err,result){
+    req.models.follower.find(query,1,function(err,result){
       if(err) {
         throw err;
       }
@@ -266,7 +266,7 @@ module.exports={
         com.jsonReturn(res,'已关注',404,null);
         return;
       }
-      req.models.followers.create(query,function(err){
+      req.models.follower.create(query,function(err){
             if (err) {
               throw err;
               // com.jsonReturn(res,'操作失败',404,err);
@@ -298,7 +298,7 @@ module.exports={
       follow_uid:follow_uid
     };
 
-    req.models.followers.find(query,1,function(err,result){
+    req.models.follower.find(query,1,function(err,result){
       if(err) {
         throw err;
       }
@@ -336,7 +336,7 @@ module.exports={
       uid:req.session.user.id
     }
     // Z DESC A ASC
-    req.models.followers.find(query,['create_time','A'],function(err,result){
+    req.models.follower.find(query,['create_time','A'],function(err,result){
         if (err) {
           com.jsonReturn(res,'操作失败',404,err);
           return;

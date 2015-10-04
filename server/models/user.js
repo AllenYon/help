@@ -19,7 +19,7 @@ var moment = require('moment');
 `update_time` int(11) DEFAULT '0',
 **/
 module.exports = function (orm, db) {
-  var users = db.define('users', {
+  var user = db.define('user', {
     // id        : { type: 'integer', required: true, }
     username     : { type: 'text'},
     password      : { type: 'text'},
@@ -27,8 +27,8 @@ module.exports = function (orm, db) {
     avatar      : { type: 'text'},
     desc      : { type: 'text'},
     interest      : { type: 'text'},
-    tid      : { type: 'integer'},
-    utype      : { type: 'integer'},
+    teacher_id      : { type: 'integer'},
+    // utype      : { type: 'integer'},
     cfans      : { type: 'integer'},
     cfollows      : { type: 'integer'},
     cbuys      : { type: 'integer'},
@@ -57,6 +57,9 @@ module.exports = function (orm, db) {
       // ]
     },
     methods: {
+      isTeacher:function(){
+        return this.teacher_id==null||this.teacher_id==0;
+      },
       serialize: function () {
         // var comments;
         // if (this.comments) {
@@ -64,11 +67,21 @@ module.exports = function (orm, db) {
         // } else {
         //   comments = [];
         // }
-
-        return {
-          id        : this.id,
-          username     : this.username
-        };
+        if(isTeacher()){
+            db.models.teacher.get(teacher_id,function(err,result){
+                return {
+                  id:this.id,
+                  username:this.username,
+                  teacher_id:teacher_id,
+                  teacher:result
+                };
+            })
+        } else {
+          return {
+            id        : this.id,
+            username     : this.username
+          };
+        }
       }
     }
   });

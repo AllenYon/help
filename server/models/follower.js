@@ -19,7 +19,7 @@ var moment = require('moment');
 `update_time` int(11) DEFAULT '0',
 **/
 module.exports = function (orm, db) {
-  var followers = db.define('followers', {
+  var follower = db.define('follower', {
     // id        : { type: 'integer', required: true, }
     uid     : { type: 'integer',required:true},
     follow_uid      : { type: 'integer',required:true},

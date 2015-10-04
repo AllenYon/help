@@ -1,5 +1,4 @@
 var user_v1 = require('../controllers/user/v1');
-var help_v1 = require('../controllers/help/v1');
 var trade_v1 = require('../controllers/trade/v1');
 var teacher_v1 = require('../controllers/teacher/v1');
 
@@ -28,18 +27,16 @@ module.exports=function(app){
 	app.post('/teacher/v1/becomeTeacher',teacher_v1.becomeTeacher);
 	app.post('/teacher/v1/update',teacher_v1.update);
 	app.post('/teacher/v1/online',teacher_v1.online);
-	app.post('/teacher/v1/offline',teacher_v1.offline);
-	app.get('/teacher/v1/getOnlineStatus',teacher_v1.getOnlineStatus);
+	// app.post('/teacher/v1/offline',teacher_v1.offline);
+	// app.get('/teacher/v1/getOnlineStatus',teacher_v1.getOnlineStatus);
 
 
-	// 互助
-	app.get('/help/v1/searchTeacher',help_v1.searchTeacher);
-	app.get('/help/v1/book',help_v1.book);
-	app.get('/help/v1/cancelBook',help_v1.cancelBook);
-
-	// 交易
-	app.get('/trade/v1/pay',trade_v1.pay);
-	app.get('/trade/v1/rate',trade_v1.rate);
+	// 撮合交易
+	app.get('/trade/v1/searchTeacher',trade_v1.searchTeacher);
+	app.post('/trade/v1/book',trade_v1.book);
+	app.post('/trade/v1/cancelBook',trade_v1.cancelBook);
+	app.post('/trade/v1/pay',trade_v1.pay);
+	app.post('/trade/v1/rate',trade_v1.rate);
 	app.get('/trade/v1/getOrderList',trade_v1.getOrderList);
 
 

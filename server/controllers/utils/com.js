@@ -1,6 +1,11 @@
 
 
 module.exports={
+
+  /****/
+  randomInt:function(min,max){
+      return  Math.floor(Math.random()*(max-min+1)+min);
+  },
   /**
   true: 已登录
   false : 未登录
@@ -12,6 +17,8 @@ module.exports={
     }
     return true;
   },
+  /**
+  **/
   jsonReturn:function(res,msg,code,args) {
     res.jsonp({
       status:{

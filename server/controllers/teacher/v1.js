@@ -1,4 +1,5 @@
 var com = require('../utils/com.js');
+var orm=require('orm');
 
 /**
 **/
@@ -19,58 +20,86 @@ var _update=function(res,teacherModel,tid,updateData){
 module.exports={
   /**
   成为导师
+  生成一个 teacherId
   **/
   becomeTeacher:function(req,res,next){
-    var uid = req.body.uid;
-    req.models.users.get(uid,function(err,user){
+    var user_id = req.body.user_id;
+    req.models.user.get(user_id,function(err,user){
       if (err) {
-          throw err;
+          if (err.code == orm.ErrorCodes.NOT_FOUND) {
+            return com.jsonReturn(res,'未找到该用户',404,null);
+          } else {
+            return next(err);
+          }
       }
-      if (!user) {
-          return com.jsonReturn(res,'未找到该用户',404,null);
-      }
-      //Todo 已经是导师 如何判断已经是导师
-      if (user.tid!=null) {
-          return com.jsonReturn(res,'已经是导师',404,null);
+      // console.log(user);
+      if (user.teacher_id!=null) {
+        return com.jsonReturn(res,'已经是导师',404,null);
       }
       var newTeacher={
+        user_id:user_id,
         title:req.body.title,
         skill:req.body.skill,
-        star:0,
-        level:0,
-        max_cpq:0,
+        star:req.body.star,
+        level:req.body.level,
+        max_cpq:req.body.max_cpq,
         current_cpq:0,
         current_chat_type:0,
         online:0,
         fake_phone:null,
       };
       //创建导师关联
-      req.models.teachers.create(newTeacher,function(err,item){
-        user.save({tid:item.id,utype:1},function(err) {
+      req.models.teacher.create(newTeacher,function(err,item){
+        user.save({teacher_id:item.id},function(err) {
           return com.jsonReturn(res,'创建导师成功',101,user);
         });
       });
-    })
+    });
+
+    //
+    // req.models.message.get(req.params.messageId, function (err, message) {
+    //   if (err) {
+    //     if (err.code == orm.ErrorCodes.NOT_FOUND) {
+    //       res.send(404, "Message not found");
+    //     } else {
+    //       return next(err);
+    //     }
+    //   }
+    //
+    //   params.message_id = message.id;
+    //
+    //   req.models.comment.create(params, function (err, message) {
+    //     if(err) {
+    //       if(Array.isArray(err)) {
+    //         return res.send(200, { errors: helpers.formatErrors(err) });
+    //       } else {
+    //         return next(err);
+    //       }
+    //     }
+    //
+    //     return res.send(200, message.serialize());
+    //   });
+    // });
   },
 
   /**
   获取上线状态
   **/
-  getOnlineStatus:function(req,res,next){
-    if(!com.checkLogin(req)){
-      return;
-    }
-    var teacher=req.session.user;
-    if (teacher.utype==0) {
-      return com.jsonReturn(res,'操作失败',404,null);
-    }
-    req.models.teacher.get(teacher.tid,function(err,result){
-      if(err){
-        return com.jsonReturn(res,'操作失败',404,err);
-      }
-      return com.jsonReturn(res,'获取状态成功',101,result.online);
-    });
-  },
+  // getOnlineStatus:function(req,res,next){
+  //   if(!com.checkLogin(req)){
+  //     return;
+  //   }
+  //   var teacher=req.session.user;
+  //   if (!teacher.isTeacher()) {
+  //     return com.jsonReturn(res,'操作失败',404,null);
+  //   }
+  //   req.models.teacher.get(teacher.tid,function(err,result){
+  //     if(err){
+  //       return com.jsonReturn(res,'操作失败',404,err);
+  //     }
+  //     return com.jsonReturn(res,'获取状态成功',101,result.online);
+  //   });
+  // },
   /**
   上线
   Params:{
@@ -82,14 +111,17 @@ module.exports={
       return;
     }
     var teacher=req.session.user;
-    if (teacher.utype==0) {
+    // console.log(teacher.isTeacher());
+    if (teacher.teacher_id==null) {
       return com.jsonReturn(res,'操作失败',404,null);
     }
-    var tid= teacher.tid;
+    var teacher_id= teacher.teacher_id;
     var updateData={
-      online:1
+      online:1,
+      current_cpq:req.body.current_cpq,
+      // current_chat_type:req.body.current_chat_type==null?0:1
     }
-    _update(res,req.models.teachers,tid,updateData);
+    _update(res,req.models.teacher,teacher_id,updateData);
   },
 
   /**
@@ -98,20 +130,20 @@ module.exports={
     tid:
   }
   **/
-  offline:function(req,res,next){
-    if(!com.checkLogin(req)){
-      return;
-    }
-    var teacher=req.session.user;
-    if (teacher.utype==0) {
-      return com.jsonReturn(res,'操作失败',404,null);
-    }
-    var tid= teacher.tid;
-    var updateData={
-      online:0
-    }
-    _update(res,req.models.teachers,tid,updateData);
-  },
+  // offline:function(req,res,next){
+  //   if(!com.checkLogin(req)){
+  //     return;
+  //   }
+  //   var teacher=req.session.user;
+  //   if (!teacher.isTeacher()) {
+  //     return com.jsonReturn(res,'操作失败',404,null);
+  //   }
+  //   var tid= teacher.tid;
+  //   var updateData={
+  //     online:0
+  //   }
+  //   _update(res,req.models.teacher,tid,updateData);
+  // },
 
   /**
   更新
@@ -129,7 +161,7 @@ module.exports={
       online:req.body.online,
       fake_phone:req.body.fake_phone
     };
-    req.models.teachers.get(updateId,function(err,result){
+    req.models.teacher.get(updateId,function(err,result){
         if (err) {
             return com.jsonReturn(res,'未找到',404,null);
         }
@@ -141,7 +173,4 @@ module.exports={
         })
     });
   },
-
-
-
 }

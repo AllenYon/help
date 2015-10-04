@@ -6,10 +6,10 @@ var modts = require("orm-timestamps");
 var connection = null;
 
 function setup(db, cb) {
-  require('./users')(orm, db);
-  require('./followers')(orm, db);
-  require('./teachers')(orm, db);
-  // require('./comment')(orm, db);
+  require('./user')(orm, db);
+  require('./follower')(orm, db);
+  require('./teacher')(orm, db);
+  require('./order')(orm, db);
   return cb(null, db);
 }
 
