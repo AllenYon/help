@@ -40,7 +40,7 @@ describe('预定订单',function(){
         teachers=res.body.result;
       }).end(done);
     });
-    it('选择第一个导师，并且',function(done){
+    it('选择第一个导师，并且预约',function(done){
       if (teachers==null||teachers.length==0) {
           console.log('没有找到合适的导师');
           console.log('推荐其他');
@@ -56,5 +56,17 @@ describe('预定订单',function(){
         }
         console.log(res.body);
       }).end(done);
+    });
+    it('取消预约',function(done){
+        done();
+    });
+    it('再生成订单,并付款',function(done){
+        done();
+    })
+    it('电话联系，完成交易',function(done){
+        done();
+    });
+    it('双方评价订单',function(done){
+        done();
     });
 });
